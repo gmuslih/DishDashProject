@@ -97,7 +97,7 @@
                         <form action="{{ route('recipes.remove', $recipe->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')  <!-- This makes the form send a DELETE request -->
-                            <button type="submit" class="btn btn-danger">Delete Recipe</button>
+                            <button type="submit" class="delete-button">Delete Recipe</button>
                         </form>
                         @endif
 

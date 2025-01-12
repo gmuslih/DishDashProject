@@ -68,15 +68,30 @@ public function remove($id)
     $user = auth()->user(); // Get the currently authenticated user
 
     // Check if the user is trying to remove it from their saved recipes
-    if ($user->savedRecipes()->where('recipe_id', $id)->exists()) {
-        $user->savedRecipes()->detach($id); // Detach it from the user's saved recipes
-        return redirect()->route('dashboard')->with('success', 'Recipe removed from your saved recipes.');
-    }
+    // if ($user->savedRecipes()->where('recipe_id', $id)->exists()) {
+    //     $user->savedRecipes()->detach($id); // Detach it from the user's saved recipes
+    //     return redirect()->route('dashboard')->with('success', 'Recipe removed from your saved recipes.');
+    // }
 
     // Check if the user is an admin or the owner of the recipe
     if ($user->email === 'admin@gmail.com' || $user->id === $recipe->user_id) {
         $recipe->delete(); // Permanently delete the recipe from the database
         return redirect()->route('dashboard')->with('success', 'Recipe deleted successfully.');
+    }
+
+    // If the user is neither an admin nor the owner
+    return redirect()->back()->with('error', 'You are not authorized to delete this recipe.');
+}
+
+public function removeSavedRecipe($id)
+{
+    $recipe = Recipe::findOrFail($id); // Find the recipe by its ID
+    $user = auth()->user(); // Get the currently authenticated user
+
+    // Check if the user is trying to remove it from their saved recipes
+    if ($user->savedRecipes()->where('recipe_id', $id)->exists()) {
+        $user->savedRecipes()->detach($id); // Detach it from the user's saved recipes
+        return redirect()->route('dashboard')->with('success', 'Recipe removed from your saved recipes.');
     }
 
     // If the user is neither an admin nor the owner

@@ -85,7 +85,7 @@
     <div class="welcome-text">
         <h2>Mango Banana Smoothie</h2><br>
         <!-- <p>Quick, healthy, and affordable meals made for your busy student life.<br>Eat well, stress less!</p> -->
-        <a href="{{ route('recipes.show', ['id' => 19]) }}" class="btn-make">Make It!</a>
+        <a href="{{ route('recipes.show', ['id' => 75]) }}" class="btn-make">Make It!</a>
         </div>
 </div><br>
 
@@ -136,7 +136,7 @@
                         @endif
 
                         <!-- Remove Recipe Button -->
-                        <form action="{{ route('recipes.remove', $recipe->id) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('recipes.removeSavedRecipe', $recipe->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-remove btn-sm mt-2" style="min-width: 175px;">Remove Recipe</button>

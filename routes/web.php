@@ -29,6 +29,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     // Delete recipe route (Admin or Owner)
     Route::delete('/recipes/{id}/remove', [RecipeController::class, 'remove'])->name('recipes.remove');
+    Route::delete('/recipes/{id}/remove-saved', [RecipeController::class, 'removeSavedRecipe'])->name('recipes.removeSavedRecipe');
 });
 
 // Public Routes
