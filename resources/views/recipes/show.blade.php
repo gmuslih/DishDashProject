@@ -62,7 +62,8 @@
                 <div class="mt-3">
                     <h2 class="text-recipe">{{ $recipe->title }}</h2>
                         <div>
-                            <img src="{{ $recipe->image }}" class="recipe-image img-fluid rounded shadow" alt="{{ $recipe->title }}">
+                        <!-- Show Recipe Image -->
+                        <img src="{{ Storage::url($recipe->image) }}" class="recipe-image img-fluid rounded shadow" alt="{{ $recipe->title }}">
                         </div>
                 </div>
                 </div>
@@ -90,6 +91,15 @@
                         <input type="hidden" name="ingredients" value="{{ $recipe->ingredients }}">
                         <input type="hidden" name="instructions" value="{{ $recipe->instructions }}">
                     </form>
+                        <!-- Delete Recipe Button (Only for Admin) -->
+                        <!-- Delete Recipe Button (Only for Admin or Recipe Owner) -->
+                        @if(auth()->check() && (auth()->user()->email === 'admin@gmail.com' || auth()->id() === $recipe->user_id))
+                        <form action="{{ route('recipes.remove', $recipe->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')  <!-- This makes the form send a DELETE request -->
+                            <button type="submit" class="btn btn-danger">Delete Recipe</button>
+                        </form>
+                        @endif
 
                 </div>
             </div>

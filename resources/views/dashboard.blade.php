@@ -123,11 +123,14 @@
                     <div class="card mt-3" style="border: 0.5px solid black;">
                         <h5 class="card-title">{{ $recipe->title }}</h5>
                         <p class="card-text">{{ $recipe->description }}</p>
-                        <img src="{{ $recipe->image }}" class="recipe-image" alt="{{ $recipe->title }}">
+
+                        <!-- Display Image -->
+                        <img src="{{ Storage::url($recipe->image) }}" class="recipe-image" alt="{{ $recipe->title }}">
 
                         <!-- View Recipe Button -->
                         <a href="{{ route('recipes.show', $recipe->id) }}" class="btn btn-primary btn-sm mt-2" style="min-width: 175px;">View Recipe</a>
-                        <!-- Edit Recipe Button (only if the user created the recipe) -->
+
+                        <!-- Edit Recipe Button -->
                         @if($recipe->user_id === auth()->id())
                             <a href="{{ route('recipes.edit', $recipe->id) }}" class="btn btn-warning btn-sm mt-2" style="min-width: 175px;">Edit Recipe</a>
                         @endif
@@ -140,6 +143,7 @@
                         </form>
                     </div>
                 @endforeach
+
             </div>
         </div>
     </div>

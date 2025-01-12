@@ -53,7 +53,7 @@
     <div class="container mt-5">
 
         <!-- Recipe Creation Form -->
-        <form method="POST" action="{{ route('recipes.store') }}">
+        <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-3">
@@ -77,9 +77,10 @@
             </div>
 
             <div class="mb-3">
-                <label for="image" class="form-label">Recipe Image URL</label>
-                <input type="url" class="form-control" id="image" name="image" required>
+                <label for="image" class="form-label">Recipe Image</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
             </div>
+            
 
             <button type="submit" class="btn btn-primary">Post Recipe!</button>
         </form><br>

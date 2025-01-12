@@ -80,7 +80,7 @@
                 @foreach ($recipes as $recipe)
                     <div class="col-md-4">
                         <div class="card">
-                            <img src="{{ $recipe['image'] }}" class="card-img-top" alt="{{ $recipe['title'] }}">
+                            <img src="{{ asset('storage/' . $recipe['image']) }}" class="card-img-top" alt="{{ $recipe['title'] }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $recipe['title'] }}</h5>
                                 <p class="card-text">This is a quick description of the recipe.</p>

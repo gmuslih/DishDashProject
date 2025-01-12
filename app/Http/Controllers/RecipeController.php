@@ -26,9 +26,10 @@ class RecipeController extends Controller
 
 public function save(Request $request)
 {
+    // Validate the request data
     $request->validate([
         'title' => 'required|string|max:255',
-        'image' => 'required|url',
+        'image' => 'required|string|max:255',  // Changed 'url' to 'string'
     ]);
 
     $user = auth()->user();
@@ -41,14 +42,14 @@ public function save(Request $request)
         return redirect()->back()->with('error', 'This recipe has already been saved.');
     }
 
-    // Check if the recipe already exists in the Recipe table, if not, create it
+    // Create or find the recipe in the Recipe table
     $recipe = Recipe::firstOrCreate(
         ['title' => $request->title],
         [
-            'image' => $request->image,
-            'description' => $request->description,
-            'ingredients' => $request->ingredients,
-            'instructions' => $request->instructions,
+            'image' => $request->image,  // Save image path
+            'description' => $request->description ?? null,  // Optional, only if provided
+            'ingredients' => $request->ingredients ?? null,  // Optional
+            'instructions' => $request->instructions ?? null,  // Optional
         ]
     );
 
@@ -59,17 +60,41 @@ public function save(Request $request)
     return redirect()->back()->with('success', 'Recipe saved successfully!');
 }
 
+
     
-    public function remove($id)
+public function remove($id)
 {
-    $user = auth()->user();
+    $recipe = Recipe::findOrFail($id); // Find the recipe by its ID
+    $user = auth()->user(); // Get the currently authenticated user
 
-    // Detach the recipe from the user's saved recipes
-    $user->savedRecipes()->detach($id);
+    // Check if the user is trying to remove it from their saved recipes
+    if ($user->savedRecipes()->where('recipe_id', $id)->exists()) {
+        $user->savedRecipes()->detach($id); // Detach it from the user's saved recipes
+        return redirect()->route('dashboard')->with('success', 'Recipe removed from your saved recipes.');
+    }
 
-    // Redirect back to the dashboard with a success message
-    return redirect()->route('dashboard')->with('success', 'Recipe removed successfully!');
+    // Check if the user is an admin or the owner of the recipe
+    if ($user->email === 'admin@gmail.com' || $user->id === $recipe->user_id) {
+        $recipe->delete(); // Permanently delete the recipe from the database
+        return redirect()->route('dashboard')->with('success', 'Recipe deleted successfully.');
+    }
+
+    // If the user is neither an admin nor the owner
+    return redirect()->back()->with('error', 'You are not authorized to delete this recipe.');
 }
+
+
+
+
+// In RecipeController.php
+
+// public function index()
+// {
+//     // Logic to fetch recipes, etc.
+//     return view('recipes.index');
+// }
+
+
 
 
 public function show($id)
@@ -86,26 +111,38 @@ public function create()
     // Store a new recipe in the database
     public function store(Request $request)
     {
+        // Validate incoming request
         $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'required|url',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
             'description' => 'required|string',
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
         ]);
-
+    
+        // Handle the image upload if a file is provided
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            // Store the image in the 'recipes' folder under the 'public' disk
+            $imagePath = $request->file('image')->store('recipes', 'public'); // This stores the image and returns the relative path
+        }
+    
+        // Create and save the recipe in the database
         $recipe = new Recipe();
         $recipe->title = $request->title;
-        $recipe->image = $request->image;
+        $recipe->image = $imagePath;  // Save the image path (relative) in the database
         $recipe->description = $request->description;
         $recipe->ingredients = $request->ingredients;
         $recipe->instructions = $request->instructions;
         $recipe->user_id = auth()->id();  // Associate recipe with the authenticated user
-        $recipe->save();
-
+        $recipe->save();  // Save the recipe in the database
+    
+        // Redirect back to the dashboard with a success message
         return redirect()->route('dashboard')->with('success', 'Recipe added successfully!');
     }
-
+    
+    
+    
     // Show the form for editing an existing recipe
     public function edit(Recipe $recipe)
     {
@@ -118,30 +155,50 @@ public function create()
     }
 
     // Update the specified recipe in the database
-    public function update(Request $request, Recipe $recipe)
-    {
-        // Check if the authenticated user is the owner of the recipe
-        if ($recipe->user_id !== auth()->id()) {
-            return redirect()->route('dashboard')->with('error', 'You can only edit your own recipes.');
-        }
+    public function update(Request $request, $id)
+{
+    $recipe = Recipe::findOrFail($id);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|url',
-            'description' => 'required|string',
-            'ingredients' => 'required|string',
-            'instructions' => 'required|string',
-        ]);
+    // Validate inputs
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'ingredients' => 'required|string',
+        'instructions' => 'required|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
-        $recipe->title = $request->title;
-        $recipe->image = $request->image;
-        $recipe->description = $request->description;
-        $recipe->ingredients = $request->ingredients;
-        $recipe->instructions = $request->instructions;
-        $recipe->save();
-
-        return redirect()->route('dashboard')->with('success', 'Recipe updated successfully!');
+    // Check if the user uploaded a new image
+    if ($request->hasFile('image')) {
+        // Store the image and get the file path
+        $imagePath = $request->file('image')->store('recipes', 'public');
+        $recipe->image = $imagePath; // Update image path
     }
+
+    // Update other fields
+    $recipe->title = $request->title;
+    $recipe->description = $request->description;
+    $recipe->ingredients = $request->ingredients;
+    $recipe->instructions = $request->instructions;
+
+    // Save the updated recipe
+    $recipe->save();
+
+    return redirect()->route('recipes.show', $recipe->id)->with('success', 'Recipe updated successfully!');
+}
+
+// app/Http/Controllers/RecipeController.php
+
+public function destroy($id)
+{
+    $recipe = Recipe::findOrFail($id);  // Find the recipe by ID
+
+    // Delete the recipe
+    $recipe->delete();
+
+    // Redirect back to the dashboard with a success message
+    return redirect()->route('dashboard')->with('success', 'Recipe deleted successfully!');
+}
 
     
 }

@@ -11,7 +11,7 @@
         <h1 class="text-center mb-4">Edit Recipe</h1>
 
         <!-- Recipe Edit Form -->
-        <form method="POST" action="{{ route('recipes.update', $recipe->id) }}">
+        <form method="POST" action="{{ route('recipes.update', $recipe->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -35,9 +35,17 @@
                 <textarea class="form-control" id="instructions" name="instructions" rows="3" required>{{ old('instructions', $recipe->instructions) }}</textarea>
             </div>
 
+            <!-- Image Upload -->
             <div class="mb-3">
-                <label for="image" class="form-label">Recipe Image URL</label>
-                <input type="url" class="form-control" id="image" name="image" value="{{ old('image', $recipe->image) }}" required>
+                <label for="image" class="form-label">Recipe Image</label>
+                <input type="file" class="form-control" id="image" name="image">
+                
+                @if($recipe->image)
+                    <!-- Display existing image -->
+                    <div class="mt-2">
+                        <img src="{{ Storage::url($recipe->image) }}" class="img-fluid" alt="{{ $recipe->title }}">
+                    </div>
+                @endif
             </div>
 
             <button type="submit" class="btn btn-primary">Update Recipe</button>

@@ -9,57 +9,47 @@ use App\Http\Controllers\DashboardController;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will be
-| assigned to the "web" middleware group. Make something great!
-|
 */
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+// Authenticated routes
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Route for displaying the recipe creation form
+    // Recipe CRUD routes
     Route::get('/recipes/create', [RecipeController::class, 'create'])->name('recipes.create');
-
-    // Route for storing the new recipe
     Route::post('/recipes', [RecipeController::class, 'store'])->name('recipes.store');
-
-    // Route for displaying the recipe edit form
     Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
-
-    // Route for updating the recipe
     Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])->name('recipes.update');
+    // List all recipes (index page) - This is crucial
+// Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
+
+    // Delete recipe route (Admin or Owner)
+    Route::delete('/recipes/{id}/remove', [RecipeController::class, 'remove'])->name('recipes.remove');
 });
 
-// Other routes
+// Public Routes
 Route::get('/features', function () {
     return view('features');
 });
-
 Route::get('/about', function () {
     return view('about');
 });
-
 Route::get('/contact', function () {
     return view('contact');
 });
-
 Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
 Route::post('/recipes/save', [RecipeController::class, 'save'])->name('recipes.save');
 
+// Show a single recipe
+Route::get('/recipe/{id}', [RecipeController::class, 'show'])->name('recipes.show');
+
+
+// Logout route
 Route::post('/logout', function () {
     Auth::logout();
-    return redirect('/'); // Redirect to the welcome page
+    return redirect('/');
 })->name('logout');
-
-Route::delete('/recipes/{id}/remove', [RecipeController::class, 'remove'])->name('recipes.remove');
-Route::get('/recipe/{id}', [RecipeController::class, 'show'])->name('recipes.show');
