@@ -120,7 +120,7 @@
             <div class="card">
                 <h3 class="text-center">Your Saved Recipes</h3>
                 @foreach($savedRecipes as $recipe)
-                    <div class="card mt-3" style="border: 0.5px solid black;">
+                    <div class="card mt-3" style="border: 0.5px solid black;max-width:700px;">
                         <h5 class="card-title">{{ $recipe->title }}</h5>
                         <p class="card-text">{{ $recipe->description }}</p>
 

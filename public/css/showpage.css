@@ -147,6 +147,7 @@ body {
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 14px; /* Adjust font size */
     transition: background-color 0.3s ease; /* Smooth hover effect */
+    margin-bottom: 30px;
 }
 
 .delete-button:hover {
