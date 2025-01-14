@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,16 +20,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Recipe CRUD routes
-    Route::get('/recipes/create', [RecipeController::class, 'create'])->name('recipes.create');
-    Route::post('/recipes', [RecipeController::class, 'store'])->name('recipes.store');
-    Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
-    Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])->name('recipes.update');
+    Route::get('/recipes/create', [UserController::class, 'create'])->name('recipes.create');
+    Route::post('/recipes', [UserController::class, 'store'])->name('recipes.store');
+    Route::get('/recipes/{recipe}/edit', [UserController::class, 'edit'])->name('recipes.edit');
+    Route::put('/recipes/{recipe}', [UserController::class, 'update'])->name('recipes.update');
     // List all recipes (index page) - This is crucial
-// Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
+// Route::get('/recipes', [UserController::class, 'index'])->name('recipes.index');
 
     // Delete recipe route (Admin or Owner)
-    Route::delete('/recipes/{id}/remove', [RecipeController::class, 'remove'])->name('recipes.remove');
-    Route::delete('/recipes/{id}/remove-saved', [RecipeController::class, 'removeSavedRecipe'])->name('recipes.removeSavedRecipe');
+    Route::delete('/recipes/{id}/remove', [UserController::class, 'remove'])->name('recipes.remove');
+    Route::delete('/recipes/{id}/remove-saved', [UserController::class, 'removeSavedRecipe'])->name('recipes.removeSavedRecipe');
 });
 
 // Public Routes
@@ -42,11 +42,11 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 });
-Route::get('/recipes/search', [RecipeController::class, 'search'])->name('recipes.search');
-Route::post('/recipes/save', [RecipeController::class, 'save'])->name('recipes.save');
+Route::get('/recipes/search', [UserController::class, 'search'])->name('recipes.search');
+Route::post('/recipes/save', [UserController::class, 'save'])->name('recipes.save');
 
 // Show a single recipe
-Route::get('/recipe/{id}', [RecipeController::class, 'show'])->name('recipes.show');
+Route::get('/recipe/{id}', [UserController::class, 'show'])->name('recipes.show');
 
 
 // Logout route
@@ -54,3 +54,8 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/');
 })->name('logout');
+
+// routes/web.php  to login dashboard
+Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::delete('/recipes/{recipe}', [AdminController::class, 'destroy'])->name('recipes.destroy');
+

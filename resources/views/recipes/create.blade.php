@@ -21,10 +21,21 @@
             ☰
         </button>
 
-        <!-- Navigation Links -->
-        <nav class="nav-container align-items-center">
-            <a class="nav-link" href="{{ url('/dashboard') }}"><h2>DASHBOARD</h2></a>
-        </nav>
+        @if(auth()->user()->email === 'admin@gmail.com')
+    <!-- Admin Navigation -->
+            <nav class="nav-container align-items-center">
+                <a class="nav-link" href="{{ url('/admin-dashboard') }}">
+                    <h2>DASHBOARD</h2>
+                </a>
+            </nav>
+        @else
+            <!-- Non-Admin Navigation -->
+            <nav class="nav-container align-items-center">
+                <a class="nav-link" href="{{ url('/dashboard') }}">
+                    <h2>DASHBOARD</h2>
+                </a>
+            </nav>
+        @endif
 
         <!-- Buttons -->
         <div class="ms-3 d-lg-block d-none">
@@ -82,8 +93,10 @@
             </div>
             
 
-            <button type="submit" class="btn btn-primary">Post Recipe!</button>
-        </form><br>
+            <button type="submit" class="btn btn-primary">
+                {{ auth()->user()->is_admin ? 'Post Recipe to Admin Dashboard' : 'Post Recipe' }}
+            </button>
+                    </form><br>
     </div>
     <footer class="footer">
     <div class="container d-flex justify-content-between align-items-center">

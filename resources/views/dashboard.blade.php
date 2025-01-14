@@ -9,33 +9,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('images/emblem.png') }}">
 </head>
 <body>
-    <!-- <header class="header">
-        <div class="logo-container">
-            <img src="{{ asset('images/logo.jpg') }}" alt="DishDash Logo" class="logo-img">
-        </div>
-        <h2>DishDash Dashboard</h2>
-        <form action="{{ route('logout') }}" method="POST" class="logout-form">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
-    </header> -->
-
-    <!-- <header class="header">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div class="logo">
-            <img src="{{ asset('images/logoheader.png') }}" alt="Logo" class="logo-img" />
-        </div>
-        <div class="d-flex align-items-center">
-            <h2>DASHBOARD</h2>
-        </div>
-        <div class="ms-3">
-            <form action="{{ route('logout') }}" method="POST" class="logout-form">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
-        </div>
-    </div>
-    </header> -->
+   
 
     <header class="header">
     <div class="container d-flex justify-content-between align-items-center">
@@ -60,6 +34,14 @@
             @csrf
             <button type="submit" class="btn btn-danger">Logout</button>
             </form>
+
+            @if(auth()->check() && (auth()->user()->email === 'admin@gmail.com' || (isset($recipe) && auth()->id() === $recipe->user_id)))
+            <form action="{{ route('admin.dashboard') }}" method="GET" style="display: inline;">
+        <button type="submit" class="admin-button">ADMIN</button>
+    </form>
+@endif
+
+
         </div>
     </div>
     
@@ -71,6 +53,12 @@
             @csrf
             <button type="submit" class="btn btn-danger">Logout</button>
             </form>
+
+            @if(auth()->check() && (auth()->user()->email === 'admin@gmail.com' || (isset($recipe) && auth()->id() === $recipe->user_id)))
+            <form action="{{ route('admin.dashboard') }}" method="GET" style="display: inline;">
+                <button type="submit" class="admin-button">ADMIN</button>
+            </form>
+        @endif
         </div>
     </div>
     </header>

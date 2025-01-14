@@ -82,6 +82,31 @@ body {
     background-color: rgb(200, 75, 75);
 }
 
+.delete-button {
+    background-color: #e74c3c; /* Red color */
+    color: #fff; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 30px; /* Add some padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 10px; /* Adjust font size */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    margin-bottom: 10px;
+}
+
+.delete-button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+.delete-button:active {
+    background-color: #a93226; /* Even darker red when clicked */
+}
+
+.delete-button:disabled {
+    background-color: #bdc3c7; /* Gray when disabled */
+    cursor: not-allowed; /* Show disabled cursor */
+}
+
 /* Navbar Toggler */
 .navbar-toggler {
     /* background-color: white; */
@@ -94,6 +119,52 @@ body {
     position: absolute;
     right: 0;
     /* transform: translateY(-50%); */
+}
+/* Admin Button Styles */
+.admin-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 10px 20px; /* Some padding for the button */
+    text-align: center; /* Center the text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Keep it inline with other elements */
+    font-size: 16px; /* Set the font size */
+    cursor: pointer; /* Change cursor to pointer when hovering */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+/* Hover effect */
+.admin-button:hover {
+    background-color: #45a049; /* Darker green when hovered */
+}
+/* Admin Section Styles */
+.admin-dashboard .row {
+    display: flex;
+    justify-content: center; /* Horizontally center the columns */
+    align-items: center; /* Vertically center the columns */
+    height: 200px; /* Make the row take full viewport height */
+}
+
+/* Ensure the card has a consistent width and margin within the admin section */
+.admin-dashboard .card {
+    width: 100%;
+    max-width: 400px; /* You can adjust the width as needed */
+    margin: 0 auto; /* Center the card within the column */
+    padding: 20px; /* Add padding inside the card */
+    text-align: center; /* Center the text */
+}
+
+/* Optional: Style the button */
+.admin-dashboard .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.admin-dashboard .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
 }
 
 .navbar-toggler:hover {

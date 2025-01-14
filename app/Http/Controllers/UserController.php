@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Recipe;
 
-class RecipeController extends Controller
+class UserController extends Controller
 {
     public function search(Request $request)
 {
@@ -67,12 +67,7 @@ public function remove($id)
     $recipe = Recipe::findOrFail($id); // Find the recipe by its ID
     $user = auth()->user(); // Get the currently authenticated user
 
-    // Check if the user is trying to remove it from their saved recipes
-    // if ($user->savedRecipes()->where('recipe_id', $id)->exists()) {
-    //     $user->savedRecipes()->detach($id); // Detach it from the user's saved recipes
-    //     return redirect()->route('dashboard')->with('success', 'Recipe removed from your saved recipes.');
-    // }
-
+   
     // Check if the user is an admin or the owner of the recipe
     if ($user->email === 'admin@gmail.com' || $user->id === $recipe->user_id) {
         $recipe->delete(); // Permanently delete the recipe from the database
@@ -97,18 +92,6 @@ public function removeSavedRecipe($id)
     // If the user is neither an admin nor the owner
     return redirect()->back()->with('error', 'You are not authorized to delete this recipe.');
 }
-
-
-
-
-// In RecipeController.php
-
-// public function index()
-// {
-//     // Logic to fetch recipes, etc.
-//     return view('recipes.index');
-// }
-
 
 
 
@@ -151,6 +134,11 @@ public function create()
         $recipe->instructions = $request->instructions;
         $recipe->user_id = auth()->id();  // Associate recipe with the authenticated user
         $recipe->save();  // Save the recipe in the database
+        if (auth()->user()->role === 'admin') {
+            // Redirect to admin dashboard after creation
+            return redirect()->route('admin.dashboard')->with('success', 'Recipe created successfully.');
+        }
+        
     
         // Redirect back to the dashboard with a success message
         return redirect()->route('dashboard')->with('success', 'Recipe added successfully!');
@@ -165,6 +153,8 @@ public function create()
         if ($recipe->user_id !== auth()->id()) {
             return redirect()->route('dashboard')->with('error', 'You can only edit your own recipes.');
         }
+
+       
 
         return view('recipes.edit', compact('recipe'));
     }
@@ -199,21 +189,16 @@ public function create()
     // Save the updated recipe
     $recipe->save();
 
+    if (auth()->user()->role === 'admin') {
+        // Redirect to admin dashboard after creation
+        return redirect()->route('admin.dashboard')->with('success', 'Recipe created successfully.');
+    }
+    
+
     return redirect()->route('recipes.show', $recipe->id)->with('success', 'Recipe updated successfully!');
 }
 
-// app/Http/Controllers/RecipeController.php
 
-public function destroy($id)
-{
-    $recipe = Recipe::findOrFail($id);  // Find the recipe by ID
-
-    // Delete the recipe
-    $recipe->delete();
-
-    // Redirect back to the dashboard with a success message
-    return redirect()->route('dashboard')->with('success', 'Recipe deleted successfully!');
-}
 
     
 }

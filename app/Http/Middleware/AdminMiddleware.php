@@ -1,5 +1,6 @@
 <?php
 
+
 // app/Http/Middleware/AdminMiddleware.php
 
 namespace App\Http\Middleware;
@@ -11,13 +12,12 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        // Check if the user is an admin
-        if (auth()->check() && auth()->user()->role === 'admin') {
-            return $next($request);  // Allow the request to proceed
+        if ($request->user()->email !== 'admin@gmail.com') {
+            return redirect('/user-dashboard');  // Redirect non-admins to user dashboard
         }
 
-        // If not admin, redirect to dashboard with error message
-        return redirect('/dashboard')->with('error', 'You do not have permission to perform this action.');
+        return $next($request);
     }
 }
+
 

@@ -1,0 +1,170 @@
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Montserrat, sans-serif;
+    height: 100%;
+}
+
+body {
+    background-color: #ffffff;
+    color: #333;
+    height: 100%;
+}
+
+/* General Styling */
+.header {
+    background-color: rgb(116, 144, 168);
+    padding: 1.5rem 0;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    z-index: 9999;
+    top: 0;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.container h1 {
+    margin-top: 20px;
+    font-weight: bold;
+    color: rgb(11, 83, 148);
+}
+
+/* Form Styling */
+.form-label {
+    font-weight: 500;
+}
+
+input, textarea {
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+    border-color: rgb(11, 83, 148);
+    outline: none;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: rgb(11, 83, 148);
+    color: white;
+    border-radius: 5px;
+    padding: 7.5px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: 2px solid rgb(11, 83, 148);
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(11, 83, 148);
+}
+
+.btn-danger {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: rgb(200, 75, 75);
+}
+
+/* Image Upload */
+input[type="file"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+img.img-fluid {
+    margin-top: 10px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Card Styling */
+.card {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgb(11, 83, 148);
+}
+
+.card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Footer */
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: auto;
+}
+
+.footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+}
+
+.footer-logo {
+    width: 200px;
+    height: auto;
+}
+
+.footer-contact p {
+    margin: 0;
+    line-height: 1.6;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .footer .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-nav {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-contact {
+        margin-top: 1rem;
+    }
+}
